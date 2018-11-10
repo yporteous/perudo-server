@@ -1,11 +1,9 @@
 const {dieRoll} = require('./random')
-const {Bid} = require('./bid')
 
 class Player {
-  constructor () {
-    // this._id = playerID
+  constructor (playerID) {
+    this._id = playerID
     this.resetDice()
-    this.bid = new Bid()
   }
 
   rollDice () {
