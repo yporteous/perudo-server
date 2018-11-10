@@ -5,6 +5,7 @@ class Bid {
   }
 
   // checks if bid is valid given previous bid
+  // TODO: Palefico
   checkValid (previousBid) {
     if (this.num === 1 && previousBid.num === 1) { // both 1: new > old
       return this.freq > previousBid.freq
@@ -35,7 +36,7 @@ class Bid {
       }
     }
   }
-  
+
 }
 
 module.exports = {
