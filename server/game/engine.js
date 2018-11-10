@@ -3,15 +3,12 @@ const {Bid} = require('./bid')
 
 class Game {
   // might change to array of player names input, creating a dictionary?
-  constructor(playerIDs) {
-    // this.players = []
-    // for (var i = 0; i < playerIDs.length; i++) {
-    //   this.players.push(new Player(playerIDs[i]))
-    // }
-
+  constructor(roomID, playerIDs) {
     this.players = playerIDs.map(id => {
       new Player(id)
     })
+
+    this.roomID = roomID
 
     this.currentPlayer = 0
     this.currentBid = new Bid() // defaults to 0x2; 1x2 is lowest possible bid
