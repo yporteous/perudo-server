@@ -3,16 +3,21 @@ const {Bid} = require('./bid')
 
 class Game {
   // might change to array of player names input, creating a dictionary?
-  constructor(roomID, playerIDs) {
+  constructor(gameID, playerIDs) {
     this.players = playerIDs.map(id => {
       new Player(id)
     })
 
-    this.roomID = roomID
+    this.gameID = gameID
 
     this.currentPlayer = 0
     this.currentBid = new Bid() // defaults to 0x2; 1x2 is lowest possible bid
     this.palifico = false
+  }
+
+  addPlayer (player) {
+    console.log(`Player ___@${player.id} joined.`)
+    this.players.push(player)
   }
 
   nextPlayer () {
@@ -27,7 +32,7 @@ class Game {
   }
 
   makeBid (player, bid) {
-    if (player._id === this.players[this.currentPlayer]._id) {
+    if (player.id === this.players[this.currentPlayer].id) {
       if (bid.checkValid(this.currentBid)) {
         this.currentBid = bid
         nextPlayer()
@@ -36,7 +41,7 @@ class Game {
   }
 
   challenge (player) {
-    if (player._id === this.players[this.currentPlayer]._id) {
+    if (player.id === this.players[this.currentPlayer].id) {
       if (evaluateCurrentState()) {
         // bid was correct, challenge fails
         // remove die from current player
@@ -64,4 +69,8 @@ class Game {
       return this.currentBid.freq <= diceTotals[0] + diceTotals[this.currentBid.num - 1]
     }
   }
+}
+
+module.exports = {
+  Game
 }
