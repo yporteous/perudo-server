@@ -1,8 +1,9 @@
 const {dieRoll} = require('./random')
 
 class Player {
-  constructor (playerID) {
-    this._id = playerID
+  constructor (playerID, displayName) {
+    this.id = playerID
+    this.displayName = displayName
     this.resetDice()
   }
 
