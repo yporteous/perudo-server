@@ -56,42 +56,24 @@ describe('Game Object', () => {
   // })
 
   describe('Bidding', () => {
-    it('should accept a valid bid', () => {
-      let newBid = new Bid(2, 3)
-      newGame.makeBid(p1, newBid)
-      expect(newGame.currentBid).toMatchObject(newBid)
+    it('should increment the player after a valid bid', () => {
+      newGame.addPlayer(p2)
+      newGame.makeBid(p1, new Bid(2, 3))
+      expect(newGame.currentPlayer).toBe(1)
     })
 
-    // it('should correctly account for aces allowing a lower freq', () => {
-    //   newGame.currentBid = new Bid(4, 3)
-    //   let newBid = new Bid(3, 1)
-    //   newGame.makeBid(newBid)
-    //
-    //   expect(newGame.currentBid).toMatchObject(newBid)
-    // })
-
-    it('should not accept an invalid bid with lower freq and same num', () => {
-      let previousBid = new Bid(4, 3)
-      newGame.currentBid = previousBid
-      let newBid = new Bid(2, 3)
-      newGame.makeBid(newBid)
-
-      expect(newGame.currentBid).toMatchObject(previousBid)
+    it('should not increment the player after an invalid bid', () => {
+      newGame.currentBid = new Bid(4, 6)
+      newGame.addPlayer(p2)
+      newGame.makeBid(p1, new Bid(2, 3))
+      expect(newGame.currentPlayer).toBe(0)
     })
 
-    it('should not accept an invalid bid with same/lower freq and lower num)', () => {
-      let previousBid = new Bid(4, 3)
-      newGame.currentBid = previousBid
-      let newBid = new Bid(4, 2)
-      newGame.makeBid(newBid)
-
-      expect(newGame.currentBid).toMatchObject(previousBid)
-    })
-  })
-
-  describe('Challenging', () => {
-    it('should correctly identify a successful challenge', () => {
-
+    it('should not accept a bid from a player who is not currently bidding', () => {
+      newGame.addPlayer(p2)
+      newGame.makeBid(p2, new Bid(2, 3))
+      expect(newGame.currentPlayer).toBe(0)
+      expect(newGame.currentBid).toMatchObject(new Bid())
     })
   })
 
