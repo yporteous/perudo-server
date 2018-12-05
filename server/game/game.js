@@ -2,11 +2,8 @@ const {Player} = require('./player')
 const {Bid} = require('./bid')
 
 class Game {
-  // might change to array of player names input, creating a dictionary?
-  constructor(gameID, playerIDs) {
-    this.players = playerIDs.map(id => {
-      new Player(id)
-    })
+  constructor(gameID, players = []) {
+    this.players = players
 
     this.gameID = gameID
 
@@ -20,8 +17,13 @@ class Game {
     this.players.push(player)
   }
 
+  getCurrentPlayerObject () {
+    return this.players[this.currentPlayer]
+  }
+
   nextPlayer () {
     this.currentPlayer = (this.currentPlayer + 1) % this.players.length
+    // what is the scope of a callback?
     // send acceptance message to next player
     // send notification message to next player
     // update all players regarding new bid
@@ -31,27 +33,36 @@ class Game {
     return (this.currentPlayer + this.players.length - 1) % this.players.length
   }
 
+  rollAllDice () {
+    this.players.forEach(player => {
+      player.rollDice()
+    })
+  }
+
   makeBid (player, bid) {
     if (player.id === this.players[this.currentPlayer].id) {
       if (bid.checkValid(this.currentBid)) {
-        this.currentBid = bid
-        nextPlayer()
+        this.currentBid = new Bid(bid.freq, bid.num)
+        this.nextPlayer()
       }
     }
   }
 
-  challenge (player) {
+  challenge (player, callback) {
     if (player.id === this.players[this.currentPlayer].id) {
       if (evaluateCurrentState()) {
         // bid was correct, challenge fails
         // remove die from current player
         player.removeDie()
+        callback(true, this.players[this.currentPlayer])
       } else {
         // bid was incorrect, challenge succeeds
         // remove die from previous player
         previousPlayer().removeDie()
+        callback(false, this.players[this.previousPlayer()])
       }
       // reset bids
+      this.currentBid = new Bid()
     }
   }
 
