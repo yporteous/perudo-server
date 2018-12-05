@@ -4,13 +4,11 @@ class Player {
   constructor (playerID, displayName) {
     this.id = playerID
     this.displayName = displayName
-    this.resetDice()
+    this.dice = [1,1,1,1,1]
   }
 
   rollDice () {
-    this.dice = this.dice.map(() => {
-      dieRoll()
-    })
+    this.dice = this.dice.map((die) => dieRoll())
   }
 
   removeDie () {
