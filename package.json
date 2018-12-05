@@ -3,10 +3,18 @@
   "version": "1.0.0",
   "description": "Perudo server",
   "main": "index.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "mocha --exit server/**/*.test.js"
+  },
   "author": "Younus Porteous",
   "license": "MIT",
   "dependencies": {
     "express": "^4.16.4",
     "socket.io": "^2.1.1"
+  },
+  "devDependencies": {
+    "expect": "^23.6.0",
+    "mocha": "^5.2.0"
   }
 }
