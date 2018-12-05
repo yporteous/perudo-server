@@ -13,7 +13,7 @@ class Game {
   }
 
   addPlayer (player) {
-    console.log(`Player ___@${player.id} joined.`)
+    // console.log(`Player ___@${player.id} joined.`)
     this.players.push(player)
   }
 
@@ -50,7 +50,7 @@ class Game {
 
   challenge (player, callback) {
     if (player.id === this.players[this.currentPlayer].id) {
-      if (evaluateCurrentState()) {
+      if (this.evaluateCurrentState()) {
         // bid was correct, challenge fails
         // remove die from current player
         player.removeDie()
