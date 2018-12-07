@@ -66,7 +66,7 @@ class Game {
     }
   }
 
-  // determines if bid is correct; returns true when under or equal
+  // determines if bid is correct; returns true when bid under or equal state
   evaluateCurrentState () {
     let allDice = [].concat.apply([], this.players.map(player => player.dice))
     let diceTotals = allDice.reduce((a, val) => {

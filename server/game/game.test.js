@@ -82,17 +82,36 @@ describe('Game Object', () => {
       p1.dice = [1, 3, 3, 4, 6]
       p2.dice = [3, 4, 4, 5, 6]
       p3.dice = [1, 1, 2, 3, 6]
+      // Num:   1 | 2 | 3 | 4 | 5 | 6
+      // –––––––––|–––|–––|–––|–––|–––
+      // Freq:  3 | 1 | 4 | 3 | 1 | 3
+      // F_ace: 3 | 4 | 7 | 6 | 4 | 6
+      // –––––––––|–––|–––|–––|–––|–––
     })
 
-    it('should correctly identify a successful challenge', () => {
+    it('should correctly identify a successful no-ace challenge', () => {
       newGame.currentBid = new Bid(5, 5)
       newGame.challenge(p1, (res, pl) => {
         expect(res).toBeFalsy()
       })
     })
 
-    it('should correctly identify an unsuccessful challenge', () => {
+    it('should correctly identify an unsuccessful no-ace challenge', () => {
       newGame.currentBid = new Bid(3, 5)
+      newGame.challenge(p1, (res, pl) => {
+        expect(res).toBeTruthy()
+      })
+    })
+
+    it('should correctly identify a successful aces challenge', () => {
+      newGame.currentBid = new Bid(4, 1)
+      newGame.challenge(p1, (res, pl) => {
+        expect(res).toBeFalsy()
+      })
+    })
+
+    it('should correctly identify an unsuccessful aces challenge', () => {
+      newGame.currentBid = new Bid(3, 1)
       newGame.challenge(p1, (res, pl) => {
         expect(res).toBeTruthy()
       })
