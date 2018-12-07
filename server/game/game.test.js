@@ -4,10 +4,8 @@ const {Game} = require('./game')
 const {Player} = require('./player')
 const {Bid} = require('./bid')
 
-let nCalls = 0
-
 describe('Game Object', () => {
-  let p1, p2, newGame
+  let p1, p2, p3, newGame
 
   beforeEach(() => {
     p1 = new Player('p0000', 'Dizzy')
@@ -74,6 +72,44 @@ describe('Game Object', () => {
       newGame.makeBid(p2, new Bid(2, 3))
       expect(newGame.currentPlayer).toBe(0)
       expect(newGame.currentBid).toMatchObject(new Bid())
+    })
+  })
+
+  describe('Challenging', () => {
+    beforeEach(() => {
+      newGame.addPlayer(p2)
+      newGame.addPlayer(p3)
+      p1.dice = [1, 3, 3, 4, 6]
+      p2.dice = [3, 4, 4, 5, 6]
+      p3.dice = [1, 1, 2, 3, 6]
+    })
+
+    it('should correctly identify a successful challenge', () => {
+      newGame.currentBid = new Bid(5, 5)
+      newGame.challenge(p1, (res, pl) => {
+        expect(res).toBeFalsy()
+      })
+    })
+
+    it('should correctly identify an unsuccessful challenge', () => {
+      newGame.currentBid = new Bid(3, 5)
+      newGame.challenge(p1, (res, pl) => {
+        expect(res).toBeTruthy()
+      })
+    })
+
+    it('should remove a die from the loser of a successful challenge', () => {
+      newGame.currentBid = new Bid(5, 5)
+      newGame.challenge(p1, (res, pl) => {
+        expect(p3.dice.length).toBe(4)
+      })
+    })
+
+    it('should remove a die from the loser of an unsuccessful challenge', () => {
+      newGame.currentBid = new Bid(3, 5)
+      newGame.challenge(p1, (res, pl) => {
+        expect(p1.dice.length).toBe(4)
+      })
     })
   })
 

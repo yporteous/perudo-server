@@ -58,7 +58,7 @@ class Game {
       } else {
         // bid was incorrect, challenge succeeds
         // remove die from previous player
-        previousPlayer().removeDie()
+        this.players[this.previousPlayer()].removeDie()
         callback(false, this.players[this.previousPlayer()])
       }
       // reset bids
