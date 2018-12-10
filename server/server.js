@@ -16,6 +16,8 @@ app.use(express.static(publicPath))
 
 //let numberOfGames = 0
 
+// TODO: Choose between callbacks and return values for Game object methods
+
 // could this be an object?
 let games = []
 
@@ -42,7 +44,11 @@ io.on('connection', socket => {
     socket.join(gameID)
 
     // report id to user to give to other potential players
-    socket.emit('gameJoined', gameID)
+    let packet = {
+      gameID: params.gameID,
+      players: currentGame.players
+    }
+    socket.emit('gameJoined', packet)
     console.log(`created game ${gameID}`)
 
     socket.on('startGame', () => {
@@ -57,12 +63,11 @@ io.on('connection', socket => {
     // find room
     let room = io.sockets.adapter.rooms[params.gameID]
 
-    // create player
-    playerMe = new Player(socket.id, params.displayName)
-
     // if room exists:
     if (room) {
-      // game should exist if room exists, but add extra validation
+      // create player
+      playerMe = new Player(socket.id, params.displayName)
+      // game should exist if room exists, but add extra validation later
       currentGame = games.filter(game => game.gameID === params.gameID)[0]
       // add player to game
       currentGame.addPlayer(playerMe)
@@ -84,23 +89,22 @@ io.on('connection', socket => {
   // playing the game
   socket.on('makeBid', bid => {
     // Game object itself checks that it is the right player's turn
-    currentGame.makeBid(playerMe, bid)
-    io.to(currentGame.gameID).emit('bidMade', bid)
+    if (currentGame.makeBid(playerMe, bid)) {
+      io.to(currentGame.gameID).emit('bidMade', bid)
+    }
   })
 
   socket.on('challenge', () => {
-    currentGame.challenge(playerMe, (bidWasCorrect, losingPlayer) => {
-      if (bidWasCorrect) {
-        io.to(currentGame.gameID).emit('challengeFailed', losingPlayer)
-      } else {
-        io.to(currentGame.gameID).emit('challengeSucceeded', losingPlayer)
-      }
-    })
+    {bidWasCorrect, losingPlayer} = currentGame.challenge(playerMe)
+    if (bidWasCorrect) {
+      io.to(currentGame.gameID).emit('challengeFailed', losingPlayer)
+    } else {
+      io.to(currentGame.gameID).emit('challengeSucceeded', losingPlayer)
+    }
   })
 
 
 })
-
 
 server.listen(port, () => {
   console.log(`Listening on port ${port}`)

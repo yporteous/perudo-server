@@ -44,25 +44,31 @@ class Game {
       if (bid.checkValid(this.currentBid)) {
         this.currentBid = new Bid(bid.freq, bid.num)
         this.nextPlayer()
+        return true
       }
     }
+    return false
   }
 
-  challenge (player, callback) {
+  challenge (player) {
     if (player.id === this.players[this.currentPlayer].id) {
+      let bidCorrect, losingPlayer
       if (this.evaluateCurrentState()) {
         // bid was correct, challenge fails
         // remove die from current player
         player.removeDie()
-        callback(true, this.players[this.currentPlayer])
+        bidCorrect = true
+        losingPlayer = this.players[this.currentPlayer]
       } else {
         // bid was incorrect, challenge succeeds
         // remove die from previous player
         this.players[this.previousPlayer()].removeDie()
-        callback(false, this.players[this.previousPlayer()])
+        bidCorrect = false
+        losingPlayer = this.players[this.previousPlayer()]
       }
       // reset bids
       this.currentBid = new Bid()
+      return {bidCorrect, losingPlayer}
     }
   }
 
