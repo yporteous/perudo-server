@@ -4,7 +4,7 @@ const {Game} = require('./game')
 const {Player} = require('./player')
 const {Bid} = require('./bid')
 
-describe('Game Object', () => {
+describe('Game object', () => {
   let p1, p2, p3, newGame
 
   beforeEach(() => {

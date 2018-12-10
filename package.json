@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "expect": "^23.6.0",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "rewire": "^4.0.1"
   }
 }

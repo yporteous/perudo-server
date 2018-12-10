@@ -2,7 +2,7 @@ const expect = require('expect')
 
 const {Bid} = require('./bid')
 
-describe('Bid Object', () => {
+describe('Bid object', () => {
   it('should create a bid object with the correct default values when called without arguments', () => {
     let bid = new Bid()
     expect(bid).toBeTruthy()
