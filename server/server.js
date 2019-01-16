@@ -95,15 +95,13 @@ io.on('connection', socket => {
   })
 
   socket.on('challenge', () => {
-    {bidWasCorrect, losingPlayer} = currentGame.challenge(playerMe)
+    let {bidWasCorrect, losingPlayer} = currentGame.challenge(playerMe)
     if (bidWasCorrect) {
       io.to(currentGame.gameID).emit('challengeFailed', losingPlayer)
     } else {
       io.to(currentGame.gameID).emit('challengeSucceeded', losingPlayer)
     }
   })
-
-
 })
 
 server.listen(port, () => {
