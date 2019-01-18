@@ -45,7 +45,7 @@ io.on('connection', socket => {
 
     // report id to user to give to other potential players
     let packet = {
-      gameID: params.gameID,
+      gameID,
       players: currentGame.players
     }
     socket.emit('gameJoined', packet)
