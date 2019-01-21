@@ -71,15 +71,15 @@ io.on('connection', socket => {
       currentGame = games.filter(game => game.gameID === params.gameID)[0]
       // add player to game
       currentGame.addPlayer(playerMe)
+      // update players already in game
+      io.to(currentGame.gameID).emit('updatePlayerList', currentGame.players)
       // join room
       socket.join(params.gameID)
-      // confirm with player
-      let packet = {
+      // confirm addition with player
+      socket.emit('gameJoined', {
         gameID: params.gameID,
         players: currentGame.players
-      }
-      socket.emit('gameJoined', packet)
-      io.to(currentGame.gameID).emit('updatePlayerList', currentGame.players)
+      })
     } else {
       // report that game does not exist
       socket.emit('gameNonExistent')
