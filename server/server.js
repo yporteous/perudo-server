@@ -27,7 +27,7 @@ io.on('connection', socket => {
   let currentGame
   let playerMe
 
-  console.log('New player connected')
+  console.log(`New player (${socket.id}) connected`)
 
   // creating a new game; sign in at this time
   socket.on('createGame', (params) => {
@@ -101,6 +101,10 @@ io.on('connection', socket => {
     } else {
       io.to(currentGame.gameID).emit('challengeSucceeded', losingPlayer)
     }
+  })
+
+  socket.on('disconnect', () => {
+    console.log(`Player (${socket.id}) disconnected.`)
   })
 })
 
