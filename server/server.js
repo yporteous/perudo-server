@@ -5,6 +5,7 @@ const socketIO = require('socket.io')
 
 const {Game} = require('./game/game')
 const {Player} = require('./game/player')
+const {GameList} = require('./gameList')
 
 const port = 3000
 const app = express()
@@ -19,7 +20,8 @@ app.use(express.static(publicPath))
 // TODO: Choose between callbacks and return values for Game object methods
 
 // could this be an object?
-let games = []
+let games = new GameList()
+// let games = []
 
 io.on('connection', socket => {
   // TODO: add parameter to socket that identifies the game
@@ -33,6 +35,7 @@ io.on('connection', socket => {
   socket.on('createGame', (params) => {
 
     // create a new game id
+    // TODO: need a new process for generating this if games will be removed
     let gameID = `${games.length}`.padStart(4, '0')
     playerMe = new Player(socket.id, params.displayName)
 
@@ -44,11 +47,11 @@ io.on('connection', socket => {
     socket.join(gameID)
 
     // report id to user to give to other potential players
-    let packet = {
+    socket.emit('gameJoined', {
       gameID,
+      playerMe,
       players: currentGame.players
-    }
-    socket.emit('gameJoined', packet)
+    })
     console.log(`created game ${gameID}`)
 
     socket.on('startGame', () => {
@@ -78,6 +81,7 @@ io.on('connection', socket => {
       // confirm addition with player
       socket.emit('gameJoined', {
         gameID: params.gameID,
+        playerMe,
         players: currentGame.players
       })
     } else {
@@ -105,6 +109,10 @@ io.on('connection', socket => {
 
   socket.on('disconnect', () => {
     console.log(`Player (${socket.id}) disconnected.`)
+    if (playerMe) {
+      // remove player from game, check if game needs to be culled
+      gameIndex = currentGame.parseInt()
+    }
   })
 })
 

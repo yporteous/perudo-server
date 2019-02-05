@@ -11,7 +11,7 @@ describe('Game object', () => {
     p1 = new Player('p0000', 'Dizzy')
     p2 = new Player('p0001', 'Skaffy')
     p3 = new Player('p0002', 'Xenny')
-    newGame = new Game('0001', [p1])
+    newGame = new Game([p1])
   })
 
   it('should create a new game object when called appropriately', () => {

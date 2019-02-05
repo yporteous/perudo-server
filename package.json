@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/server.js",
-    "test": "mocha --exit server/**/*.test.js"
+    "test": "mocha --exit 'server/**/*.test.js'"
   },
   "author": "Younus Porteous",
   "license": "MIT",

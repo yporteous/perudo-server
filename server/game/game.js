@@ -1,13 +1,14 @@
-const {Player} = require('./player')
+// const {Player} = require('./player')
 const {Bid} = require('./bid')
 
 class Game {
-  constructor(gameID, players = []) {
+  constructor(players = []) {
     this.players = players
 
-    this.gameID = gameID
+    this.gameID = ''
 
     this.currentPlayer = 0
+    this.firstBidder = 0
     this.currentBid = new Bid() // defaults to 0x2; 1x2 is lowest possible bid
     this.palifico = false
   }
@@ -15,6 +16,10 @@ class Game {
   addPlayer (player) {
     // console.log(`Player ___@${player.id} joined.`)
     this.players.push(player)
+  }
+
+  removePlayer (player) {
+    this.players = this.players.filter(p => p.socket !== player.socket)
   }
 
   getCurrentPlayerObject () {
